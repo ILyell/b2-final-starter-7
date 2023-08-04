@@ -49,16 +49,16 @@ RSpec.describe "Bulk Discounts Index", type: :feature do
 
                 within "#discount_create" do
 
-                    fill_in "Discount Name", with: "A New 15.5% off 12 items discount"
-                    fill_in "Quantity Threshold", with: 12
-                    fill_in "Percentage Off", with: 15.5
+                    fill_in :name, with: "A New 15.5% off 12 items discount"
+                    fill_in :quantity_threshold, with: 12
+                    fill_in :percentage, with: 15.5
                 
                     click_button "Submit"
                 end
 
                 expect(current_path).to eq(merchant_bulk_discounts_path(@merchant1))
 
-                expect(page).to have_content("A New 15% off 12 items discount")
+                expect(page).to have_content("A New 15.5% off 12 items discount")
                 expect(page).to have_content("Discount Quanitity Threshold: 12")
                 expect(page).to have_content("Discount Percentage: 15.5%")
 
