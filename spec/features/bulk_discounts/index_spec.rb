@@ -26,6 +26,7 @@ RSpec.describe "Bulk Discounts Index", type: :feature do
                     expect(page).to have_content(@discount1.quantity_threshold)
                     expect(page).to have_content("#{@discount1.percentage * 100}%")
                 end
+                
                 within "#discount_#{@discount2.id}" do
                     expect(page).to have_link("Bulk Discount :#{@discount2.name}")
                     expect(page).to have_content(@discount2.quantity_threshold)
@@ -35,6 +36,32 @@ RSpec.describe "Bulk Discounts Index", type: :feature do
                 expect(page).to_not have_content("#discount_#{@discount4}")
                 expect(page).to_not have_content("#discount_#{@discount5}")
                 expect(page).to_not have_content("#discount_#{@discount6}")
+            end
+
+            it 'Has a link to create a new bulk discount' do
+                visit merchant_bulk_discounts_path(@merchant1)
+
+                expect(page).to have_link("Add Bulk Discount")
+
+                click_link "Add Bulk Discount"
+
+                expect(current_path).to eq(new_merchant_bulk_discount_path(@merchant1))
+
+                within "#discount_create" do
+
+                    fill_in "Discount Name", with: "A New 15.5% off 12 items discount"
+                    fill_in "Quantity Threshold", with: 12
+                    fill_in "Percentage Off", with: 15.5
+                
+                    click_button "Submit"
+                end
+
+                expect(current_path).to eq(merchant_bulk_discounts_path(@merchant1))
+
+                expect(page).to have_content("A New 15% off 12 items discount")
+                expect(page).to have_content("Discount Quanitity Threshold: 12")
+                expect(page).to have_content("Discount Percentage: 15.5%")
+
             end
         end
     end
