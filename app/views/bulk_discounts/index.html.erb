@@ -12,4 +12,6 @@
         <p> Discount Percentage: <%= discount.percentage * 100 %>%</p>
         <section>
     <% end %>
+
+    <%= link_to "Add Bulk Discount", new_merchant_bulk_discount_path(@merchant) %>
 </body>
