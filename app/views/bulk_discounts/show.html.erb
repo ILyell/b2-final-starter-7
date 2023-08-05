@@ -1,0 +1,7 @@
+<%= render partial: "shared/nav" %>
+
+<section id="discount_info">
+    <p>Discount: <%= @discount.name %> </p>
+    <p>Discount Threshold: <%= @discount.quantity_threshold %> </p>
+    <p>Discount Percentage: <%= @discount.percentage * 100 %>%</p>
+</section>
