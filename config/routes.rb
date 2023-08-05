@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   resources :merchants, only: [:show] do
-    resources :bulk_discounts, only: [:index, :show, :new, :create]
+    resources :bulk_discounts, only: [:index, :show, :new, :create, :destroy]
     resources :dashboard, only: [:index]
     resources :items, except: [:destroy]
     resources :item_status, only: [:update]
