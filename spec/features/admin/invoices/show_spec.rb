@@ -59,6 +59,10 @@ describe "Admin Invoices Index Page" do
     expect(page).to_not have_content(@i2.total_revenue)
   end
 
+  it 'should display the total revenue with discounts the invoie will generate' do
+    expect(page).to have_content("Discounted Revenue: 30.0")
+  end
+
   it "should have status as a select field that updates the invoices status" do
     within("#status-update-#{@i1.id}") do
       select("cancelled", :from => "invoice[status]")
