@@ -12,7 +12,12 @@ class InvoiceItem < ApplicationRecord
 
   def discounted_revenue
     discount_item = InvoiceItem.discount(self.id)
-    discount_item.revenue - (discount_item.revenue * discount_item.percentage)
+    if discount_item != nil
+      discount_item.revenue - (discount_item.revenue * discount_item.percentage)
+    else
+      self.quantity * self.unit_price
+    end
+    
   end
 
 

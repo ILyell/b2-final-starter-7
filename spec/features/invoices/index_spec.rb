@@ -50,6 +50,10 @@ describe "merchant invoices index" do
     @transaction6 = Transaction.create!(credit_card_number: 879799, result: 0, invoice_id: @invoice_6.id)
     @transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_7.id)
     @transaction8 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_8.id)
+
+    @discount1 = @merchant1.bulk_discounts.create!(name: "10% off 10 or more", quantity_threshold: 10, percentage: 0.10)
+    @discount2 = @merchant1.bulk_discounts.create!(name: "15% off 20 or more", quantity_threshold: 20, percentage: 0.15)
+    @discount3 = @merchant1.bulk_discounts.create!(name: "20% off 30 or more", quantity_threshold: 30, percentage: 0.20)
   end
 
   it "can see all invoice ids that include at least one of my merchant's items" do
