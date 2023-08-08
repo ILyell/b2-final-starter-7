@@ -22,6 +22,11 @@ RSpec.describe "invoices show" do
     @customer_5 = Customer.create!(first_name: "Sylvester", last_name: "Nader")
     @customer_6 = Customer.create!(first_name: "Herber", last_name: "Kuhn")
 
+    @discount1 = @merchant1.bulk_discounts.create!(name: "10% off 3 or more", quantity_threshold: 3, percentage: 0.10)
+    @discount2 = @merchant1.bulk_discounts.create!(name: "15% off 5 or more", quantity_threshold: 5, percentage: 0.15)
+    @discount3 = @merchant1.bulk_discounts.create!(name: "20% off 10 or more", quantity_threshold: 10, percentage: 0.20)
+
+
     @invoice_1 = Invoice.create!(customer_id: @customer_1.id, status: 2, created_at: "2012-03-27 14:54:09")
     @invoice_2 = Invoice.create!(customer_id: @customer_1.id, status: 2, created_at: "2012-03-28 14:54:09")
     @invoice_3 = Invoice.create!(customer_id: @customer_2.id, status: 2)
@@ -83,6 +88,12 @@ RSpec.describe "invoices show" do
     visit merchant_invoice_path(@merchant1, @invoice_1)
 
     expect(page).to have_content(@invoice_1.total_revenue)
+  end
+
+  it 'shows the adjusted revenue from the applied discounts' do
+    visit merchant_invoice_path(@merchant1, @invoice_1)
+
+    expect(page).to have_content("Revenue after discounts: 134.1")
   end
 
   it "shows a select field to update the invoice status" do

@@ -24,6 +24,14 @@ namespace :csv_load do
       puts "Items imported."
       end
 
+   task :bulk_discounts => :environment do
+      CSV.foreach("db/data/bulk_discounts.csv", headers: true) do |row|
+         BulkDiscount.create!(id: row.to_hash["id"], name: row.to_hash["name"], quantity_threshold: row.to_hash["quantity_threshold"], percentage: row.to_hash["percentage"], created_at: row.to_hash["created_at"], updated_at: row.to_hash["updated_at"], merchant_id: row.to_hash["merchant_id"])
+      end
+      ActiveRecord::Base.connection.reset_pk_sequence!("bulk_discounts")
+      puts "Bulk Discounts imported."
+      end
+
    task :invoices => :environment do
       CSV.foreach("db/data/invoices.csv", headers: true) do |row|
          if row.to_hash["status"] == "cancelled"
@@ -85,7 +93,7 @@ namespace :csv_load do
    end
 
    task :all do 
-      [:customers, :invoices, :merchants, :items, :invoice_items, :transactions].each do |task|
+      [:customers, :invoices, :merchants, :items, :invoice_items, :transactions, :bulk_discounts].each do |task|
          Rake::Task["csv_load:#{task}".to_sym].invoke
       end
    end

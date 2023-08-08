@@ -30,13 +30,30 @@ RSpec.describe InvoiceItem, type: :model do
       @i3 = Invoice.create!(customer_id: @c2.id, status: 2)
       @i4 = Invoice.create!(customer_id: @c3.id, status: 2)
       @i5 = Invoice.create!(customer_id: @c4.id, status: 2)
-      @ii_1 = InvoiceItem.create!(invoice_id: @i1.id, item_id: @item_1.id, quantity: 1, unit_price: 10, status: 0)
-      @ii_2 = InvoiceItem.create!(invoice_id: @i1.id, item_id: @item_2.id, quantity: 1, unit_price: 8, status: 0)
-      @ii_3 = InvoiceItem.create!(invoice_id: @i2.id, item_id: @item_3.id, quantity: 1, unit_price: 5, status: 2)
-      @ii_4 = InvoiceItem.create!(invoice_id: @i3.id, item_id: @item_3.id, quantity: 1, unit_price: 5, status: 1)
+      @ii_1 = InvoiceItem.create!(invoice_id: @i1.id, item_id: @item_1.id, quantity: 11, unit_price: 10, status: 0)
+      @ii_2 = InvoiceItem.create!(invoice_id: @i1.id, item_id: @item_2.id, quantity: 4, unit_price: 8, status: 0)
+      @ii_3 = InvoiceItem.create!(invoice_id: @i2.id, item_id: @item_3.id, quantity: 6, unit_price: 5, status: 2)
+      @ii_4 = InvoiceItem.create!(invoice_id: @i3.id, item_id: @item_3.id, quantity: 2, unit_price: 5, status: 1)
+
+      @discount1 = @m1.bulk_discounts.create!(name: "10% off 3 or more", quantity_threshold: 3, percentage: 0.10)
+      @discount2 = @m1.bulk_discounts.create!(name: "15% off 5 or more", quantity_threshold: 5, percentage: 0.15)
+      @discount3 = @m1.bulk_discounts.create!(name: "20% off 10 or more", quantity_threshold: 10, percentage: 0.20)
     end
     it 'incomplete_invoices' do
       expect(InvoiceItem.incomplete_invoices).to eq([@i1, @i3])
+    end
+
+    it 'discount(invoice_item_id' do
+      expect(InvoiceItem.discount(@ii_1.id).name).to eq("20% off 10 or more")
+      expect(InvoiceItem.discount(@ii_2.id).name).to eq("10% off 3 or more")
+      expect(InvoiceItem.discount(@ii_3.id).name).to eq("15% off 5 or more")
+      expect(InvoiceItem.discount(@ii_4.id)).to eq(nil)
+    end
+
+    it 'gives a discounted revenue' do
+      expect(@ii_1.discounted_revenue).to eq(88.0)
+      expect(@ii_2.discounted_revenue).to eq(28.8)
+      expect(@ii_3.discounted_revenue).to eq(25.5)
     end
   end
 end
