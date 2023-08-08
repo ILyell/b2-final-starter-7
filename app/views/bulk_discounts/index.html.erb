@@ -5,12 +5,22 @@
         <p class='col-12'>My Bulk Discounts</p>
     </div>
 
+    <h3>Next 3 US Holidays</h3>
+    <% @holidays.each do |holiday| %>
+        <br>
+        <%= holiday.date %>
+        <%= holiday.name %>
+        <br>
+    <% end %>
+
+    <br>
+
     <% @discounts.each do |discount| %>
         <section id="discount_<%= discount.id %>">
         <p><%= link_to "Bulk Discount :#{discount.name}", merchant_bulk_discount_path(@merchant, discount) %></p>
         <p> Discount Quanitity Threshold: <%= discount.quantity_threshold %></p>
         <p> Discount Percentage: <%= discount.percentage * 100 %>%</p>
-        <%= button_to "Delete Discount: #{discount.id}", method: :destroy %>
+        <%= button_to "Delete Discount: #{discount.id}", method: :delete %>
         <section>
     <% end %>
 
