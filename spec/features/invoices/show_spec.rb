@@ -46,7 +46,7 @@ RSpec.describe "invoices show" do
     @ii_8 = InvoiceItem.create!(invoice_id: @invoice_7.id, item_id: @item_8.id, quantity: 1, unit_price: 5, status: 1)
     @ii_9 = InvoiceItem.create!(invoice_id: @invoice_7.id, item_id: @item_4.id, quantity: 1, unit_price: 1, status: 1)
     @ii_10 = InvoiceItem.create!(invoice_id: @invoice_8.id, item_id: @item_5.id, quantity: 1, unit_price: 1, status: 1)
-    @ii_11 = InvoiceItem.create!(invoice_id: @invoice_1.id, item_id: @item_8.id, quantity: 12, unit_price: 6, status: 1)
+    @ii_11 = InvoiceItem.create!(invoice_id: @invoice_1.id, item_id: @item_8.id, quantity: 1, unit_price: 6, status: 1)
 
     @transaction1 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_1.id)
     @transaction2 = Transaction.create!(credit_card_number: 230948, result: 1, invoice_id: @invoice_2.id)
@@ -93,7 +93,17 @@ RSpec.describe "invoices show" do
   it 'shows the adjusted revenue from the applied discounts' do
     visit merchant_invoice_path(@merchant1, @invoice_1)
 
-    expect(page).to have_content("Revenue after discounts: 134.1")
+    expect(page).to have_content("Revenue after discounts: 82.5")
+  end
+
+  it 'shows a link to the discount applied when applicable' do
+    visit merchant_invoice_path(@merchant1, @invoice_1)
+    
+    expect(page).to have_link("Applied Discount")
+
+    click_link "Applied Discount"
+
+    expect(page).to have_content("15% off 5 or more")
   end
 
   it "shows a select field to update the invoice status" do
