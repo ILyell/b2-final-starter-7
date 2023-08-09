@@ -40,16 +40,16 @@ describe "Bulk Discounts Edit Page" do
         # expect(page).to have_content("Succesfully Updated Item Info!")
     end
 
-    xit "shows a flash message if not all sections are filled in" do
+    it "shows a flash message if not all sections are filled in" do
         visit edit_merchant_bulk_discount_path(@merchant1, @discount1)
 
         fill_in "Name", with: ""
-        fill_in "Description", with: "Eco friendly shampoo"
-        fill_in "Unit price", with: "15"
+        fill_in "Quantity", with: "Eco friendly shampoo"
+        fill_in "Percentage", with: "0.25"
 
         click_button "Submit"
         
-        expect(current_path).to eq(edit_merchant_item_path(@merchant1, @discount1))
-        expect(page).to have_content("All fields must be completed, get your act together.")
+        expect(current_path).to eq(edit_merchant_bulk_discount_path(@merchant1, @discount1))
+        expect(page).to have_content("All fields must be completed.")
     end
 end

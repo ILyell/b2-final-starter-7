@@ -20,7 +20,7 @@
         <p><%= link_to "Bulk Discount :#{discount.name}", merchant_bulk_discount_path(@merchant, discount) %></p>
         <p> Discount Quanitity Threshold: <%= discount.quantity_threshold %></p>
         <p> Discount Percentage: <%= discount.percentage * 100 %>%</p>
-        <%= button_to "Delete Discount: #{discount.id}", method: :delete %>
+        <%= button_to "Delete Discount: #{discount.id}", {:controller => :bulk_discounts, :action => "destroy", :id => discount.id}, :method => :delete %>
         <section>
     <% end %>
 
