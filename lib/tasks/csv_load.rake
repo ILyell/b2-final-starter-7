@@ -1,5 +1,16 @@
 require "csv"
 namespace :csv_load do
+   task :unload => :environment do
+      InvoiceItem.destroy_all
+      Transaction.destroy_all
+      Invoice.destroy_all
+      Item.destroy_all
+      BulkDiscount.destroy_all
+      Merchant.destroy_all
+      Customer.destroy_all
+   end
+
+
    task :customers => :environment do
       CSV.foreach("db/data/customers.csv", headers: true) do |row|
          Customer.create!(row.to_hash)
@@ -93,7 +104,7 @@ namespace :csv_load do
    end
 
    task :all do 
-      [:customers, :invoices, :merchants, :items, :invoice_items, :transactions, :bulk_discounts].each do |task|
+      [:unload, :customers, :invoices, :merchants, :items, :invoice_items, :transactions, :bulk_discounts].each do |task|
          Rake::Task["csv_load:#{task}".to_sym].invoke
       end
    end
